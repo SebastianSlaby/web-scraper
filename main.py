@@ -43,6 +43,8 @@ def write_to_file(contents):
 
 
 def check_for_new(contents):
+    file = open('previous.txt', 'a')
+    file.close();
     file = open('previous.txt', 'r')
     file_contents = json.load(file)
     file.close()
