@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup as Soup
 import re
 import json
 import smtplib
+import os
 from email.mime.text import MIMEText
 
 url = 'https://cos.po.opole.pl/index.php/organizacja-roku/zaj-odw-weaii'
@@ -43,8 +44,6 @@ def write_to_file(contents):
 
 
 def check_for_new(contents):
-    file = open('previous.txt', 'a')
-    file.close();
     file = open('previous.txt', 'r')
     file_contents = json.load(file)
     file.close()
@@ -62,7 +61,6 @@ def check_for_new(contents):
             message += str(contents[it][1])
             message +='\n'
             message += str(contents[it][2])
-        #write_to_file(filtered_containers)
         sendmail(message)
 
 def sendmail(message):
@@ -89,5 +87,6 @@ def sendmail(message):
 
 
 filtered_containers = get_info(containers, indexes)
-#write_to_file(filtered_containers) #HAS TO BE RUN ONCE, UNCOMMENT THIS LINE WHEN FIRST RUNNING THIS SCRIPT
+if not os.path.isfile("./previous.txt"):
+    write_to_file(filtered_containers) #HAS TO BE RUN ONCE, UNCOMMENT THIS LINE WHEN FIRST RUNNING THIS SCRIPT
 check_for_new(filtered_containers)
